@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Quantum Neural Network - Classification</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qiskit/0.32.0/qiskit.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@qiskit-community/quantum-simulator@1.1.0/dist/quantum-simulator.min.js"></script>
+</head>
+<body>
+  <h1>Quantum Neural Network - Classification</h1>
+  
+  <label for="input-data">Input Data:</label>
+  <input type="text" id="input-data" />
+  <button onclick="runQNN()">Run QNN</button>
+  
+  <h2>Results:</h2>
+  <div id="output-area"></div>
+  
+  <script>
+    // Function to execute the quantum computation
+    function runQNN() {
+      // Get the input data from the text field
+      var inputData = document.getElementById("input-data").value;
+      
+      // Create the quantum circuit based on the input data
+      var quantumCircuit = createQuantumCircuit(inputData);
+      
+      // Simulate the quantum circuit
+      var simulator = new QuantumSimulator('qasm_simulator');
+      var job = simulator.execute(quantumCircuit);
+      
+      // Get the measurement results
+      job.then(function(result) {
+        var counts = result.getCounts();
+        
+        // Display the results in the output area
+        var outputArea = document.getElementById("output-area");
+        outputArea.innerHTML = "Results: " + JSON.stringify(counts);
+      });
+    }
+    
+    // Function to create the quantum circuit
+    function createQuantumCircuit(inputData) {
+      var numQubits = 2; // Example: 2 qubits
+      var circuit = new QuantumCircuit(numQubits);
+      
+      // Apply gates to encode the input data
+      // Example: Encode binary input data on two qubits
+      for (var i = 0; i < inputData.length; i++) {
+        var bit = inputData.charAt(i);
+        if (bit === '0') {
+          circuit.x(i); // Apply X gate for '0' bit
+        }
+      }
+      
+      // Apply additional gates and operations as needed for the specific QNN architecture
+      
+      return circuit;
+    }
+  </script>
+</body>
+</html>
